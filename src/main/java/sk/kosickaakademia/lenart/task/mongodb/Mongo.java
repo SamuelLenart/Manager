@@ -5,7 +5,7 @@ import sk.kosickaakademia.lenart.task.collection.Task;
 import java.util.List;
 
 public interface Mongo {
-    public void insertTask(Task task);
+    public boolean insertTask(String title, String task, int priority, double price);
 
     public void setTaskDone(int id);
 

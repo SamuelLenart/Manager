@@ -2,6 +2,7 @@ package sk.kosickaakademia.lenart.task.mongodb;
 
 
 import com.mongodb.MongoClient;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
@@ -14,20 +15,40 @@ import java.util.Date;
 import java.util.List;
 
 public class Collection implements Mongo {
-    // name: task
-    //collection: tasks
-    private MongoClient client = new MongoClient();
-    private MongoDatabase database = client.getDatabase("task");
-    private MongoCollection<Document> collection = database.getCollection("tasks");
+    private static final MongoClient mongoClient = new MongoClient();
+    private static MongoDatabase database;
+    private static Document docs;
+    private static MongoCollection<Document> collection;
+    private static Date date = new Date();
 
     @Override
-    public void insertTask(Task task) {
-        Document doc = new Document();
-        doc.put("name", task.getName());
-        doc.put("date", task.getDate());
-        doc.put("priority", task.getPriority());
-        doc.put("done", task.isDone());
-        collection.insertOne(doc);
+    public boolean insertTask(String title, String task, int priority, double price) {
+        if(title==null || title.equals("") || task==null || task.equals("") || priority<1 || priority>3 )
+            return false;
+        if(price==0){
+            database = mongoClient.getDatabase("TaskDB");
+            collection = database.getCollection("tasks");
+            docs = new Document("task", task);
+            docs.append("date", date);
+            docs.append("title", title);
+            docs.append("task", task);
+            docs.append("priority", priority);
+            docs.append("done", false);
+            collection.insertOne(docs);
+            return true;
+        }else {
+            database = mongoClient.getDatabase("TaskDB");
+            collection = database.getCollection("tasks");
+            docs = new Document("task", task);
+            docs.append("date", date);
+            docs.append("title", title);
+            docs.append("task", task);
+            docs.append("priority", priority);
+            docs.append("price", price);
+            docs.append("done", false);
+            collection.insertOne(docs);
+            return true;
+        }
     }
 
     @Override
@@ -37,18 +58,13 @@ public class Collection implements Mongo {
 
     @Override
     public List<Task> getAllTasks() {
-        List<Task> list = new ArrayList<>();
-        for (Document doc : collection.find()){
-            try {
-                JSONObject object = (JSONObject) new JSONParser().parse(doc.toJson());
-                String name = (String) object.get("name");
-                Date date = (Date) object.get("date");
-                int priority = Integer.parseInt(String.valueOf(object.get("priority")));
-                boolean done = (boolean) object.get("done");
-                Task task = new Task(name, date, priority, done);
-            } catch (Exception e) { e.printStackTrace(); }
+        database = mongoClient.getDatabase("TaskDB");
+        collection = database.getCollection("tasks");
+        FindIterable<Document> iterDoc = collection.find();
+        for (Document document : iterDoc) {
+            System.out.println(document);
         }
-        return list;
+        return null;
     }
 
     public List<Task> getAllTasks(boolean done){
