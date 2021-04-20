@@ -59,7 +59,7 @@ public class Collection implements Mongo {
         doc.put("done", true);
         BasicDBObject updateObj = new BasicDBObject();
         updateObj.put("$set", doc);
-        database.getCollection("Tasks").updateOne(query, updateObj);
+        database.getCollection("tasks").updateOne(query, updateObj);
     }
 
     @Override
@@ -128,7 +128,7 @@ public class Collection implements Mongo {
     public List<Task> getAllTasksByPriority(int p) {
         if(p<=0 || p>3) return null;
         database = mongoClient.getDatabase("TaskDB");
-        collection = database.getCollection("Tasks");
+        collection = database.getCollection("tasks");
         List<Task> list = new ArrayList<>();
         FindIterable<Document> iterDoc = collection.find();
         for (Document document : iterDoc) {
