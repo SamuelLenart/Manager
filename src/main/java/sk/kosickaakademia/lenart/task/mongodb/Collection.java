@@ -9,6 +9,8 @@ import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import sk.kosickaakademia.lenart.task.collection.Task;
 
 import java.util.ArrayList;
@@ -189,11 +191,29 @@ public class Collection implements Mongo {
 
     @Override
     public void insertTaskJSON(JSONObject task) {
-
+        collection=database.getCollection("tasks");
+        JSONObject object = new JSONObject();
+        object.put("task",task);
+        docs=Document.parse(object.toJSONString());
+        collection.insertOne(docs);
     }
 
     @Override
     public JSONObject getAllTasksJSON() {
+        for(Document doc : database.getCollection("tasks").find()){
+            try {
+                JSONObject object = (JSONObject) new JSONParser().parse(doc.toJson());
+                Date date = (Date) object.get("date");
+                String title = (String) object.get("title");
+                String task = (String) object.get("task");
+                int priority = Integer.parseInt(String.valueOf(object.get("priority")));
+                double price = (double) object.get("price");
+                boolean done = (boolean) object.get("done");
+                object.put(new Task(title,date,price,priority,done));
+            }catch (ParseException e){
+                e.printStackTrace();
+            }
+        }
         return null;
     }
 }

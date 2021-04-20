@@ -26,7 +26,11 @@ public class Task {
         this.id = id;
     }
 
-    public String getName() {
+    public double getPrice() {
+        return price;
+    }
+
+    public String getName(){
         return name;
     }
 
@@ -40,5 +44,9 @@ public class Task {
 
     public Date getDate() {
         return date;
+    }
+
+    public ObjectId getId() {
+        return id;
     }
 }
