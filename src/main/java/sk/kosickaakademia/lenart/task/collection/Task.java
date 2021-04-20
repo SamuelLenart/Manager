@@ -11,7 +11,7 @@ public class Task {
     private Date date;
     private double price;
 
-    public Task(String title , int priority, boolean done, Date date) {
+    public Task(String name , int priority, boolean done, Date date) {
         this.name = name;
         this.date = date;
         this.priority = priority;

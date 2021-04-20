@@ -8,6 +8,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 import org.bson.types.ObjectId;
+import org.json.simple.JSONObject;
 import sk.kosickaakademia.lenart.task.collection.Task;
 
 import java.util.ArrayList;
@@ -154,11 +155,45 @@ public class Collection implements Mongo {
 
     @Override
     public List<Task> getAllTasksByName(String name) {
-        return null;
+        database = mongoClient.getDatabase("TaskDB");
+        collection = database.getCollection("tasks");
+        List<Task> list = new ArrayList<>();
+        FindIterable<Document> iterDoc = collection.find();
+        for (Document document : iterDoc) {
+            String title = document.getString("title");
+            int priority = document.getInteger("priority");
+            boolean done = document.getBoolean("done");
+            Date date = document.getDate("date");
+            ObjectId id = document.getObjectId("_id");
+            Task tasks;
+            if (name==title) {
+                if (document.containsKey("price")) {
+                    double price = document.getDouble("price");
+                    tasks = new Task(title, date, priority, (int) price, done);
+                } else {
+                    tasks = new Task(title, priority, done, date);
+                }
+                tasks.setId(id);
+                list.add(tasks);
+            }else {
+                return null;
+            }
+        }
+        return list;
     }
 
     @Override
     public void DeleteDoneTasks() {
 
+    }
+
+    @Override
+    public void insertTaskJSON(JSONObject task) {
+
+    }
+
+    @Override
+    public JSONObject getAllTasksJSON() {
+        return null;
     }
 }
