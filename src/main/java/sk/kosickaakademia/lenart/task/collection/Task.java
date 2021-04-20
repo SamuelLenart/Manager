@@ -11,15 +11,19 @@ public class Task {
     private Date date;
     private double price;
 
-    public Task(String name, Date date, int priority, boolean done) {
+    public Task(String title , int priority, boolean done, Date date) {
         this.name = name;
         this.date = date;
         this.priority = priority;
         this.done = done;
     }
-    public Task(String name, Date date, int priority, boolean done, double price) {
-        this(name, date, priority, done);
+    public Task(String title, Date date, double price, int priority, boolean done) {
+        this(title,priority, done,date);
         this.price = price;
+    }
+
+    public void setId(ObjectId id) {
+        this.id = id;
     }
 
     public String getName() {

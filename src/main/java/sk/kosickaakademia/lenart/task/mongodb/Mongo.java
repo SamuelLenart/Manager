@@ -7,7 +7,7 @@ import java.util.List;
 public interface Mongo {
     public boolean insertTask(String title, String task, int priority, double price);
 
-    public void setTaskDone(int id);
+    public void setTaskDone();
 
     public List<Task> getAllTasks();
 
