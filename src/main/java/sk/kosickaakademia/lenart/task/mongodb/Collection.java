@@ -8,6 +8,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 import org.bson.types.ObjectId;
+import org.json.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -200,20 +201,51 @@ public class Collection implements Mongo {
 
     @Override
     public JSONObject getAllTasksJSON() {
-        for(Document doc : database.getCollection("tasks").find()){
+        database = mongoClient.getDatabase("TaskDB");
+        JSONArray array = new JSONArray();
+        JSONObject json = new JSONObject();
+        for(Document docs : database.getCollection("tasks").find()){
             try {
-                JSONObject object = (JSONObject) new JSONParser().parse(doc.toJson());
-                Date date = (Date) object.get("date");
-                String title = (String) object.get("title");
-                String task = (String) object.get("task");
-                int priority = Integer.parseInt(String.valueOf(object.get("priority")));
-                double price = (double) object.get("price");
-                boolean done = (boolean) object.get("done");
-                object.put(new Task(title,date,price,priority,done));
+                JSONObject object = (JSONObject) new JSONParser().parse(docs.toJson());
+                array.put(object);
             }catch (ParseException e){
                 e.printStackTrace();
             }
         }
-        return null;
+        json.put("tasks", array);
+        return json;
+    }
+    @Override
+    public JSONObject getAllTasksByPriorityJSON() {
+        database = mongoClient.getDatabase("TaskDB");
+        JSONArray array = new JSONArray();
+        JSONObject json = new JSONObject();
+        for(Document docs : database.getCollection("Tasks").find()){
+            try {
+                JSONObject object = (JSONObject) new JSONParser().parse(docs.toJson());
+                array.put(object);
+            }catch (ParseException e){
+                e.printStackTrace();
+            }
+        }
+        json.put("Tasks", array);
+        return json;
+    }
+
+    @Override
+    public JSONObject getAllTasksByNameJSON() {
+        database = mongoClient.getDatabase("TaskDB");
+        JSONArray array = new JSONArray();
+        JSONObject json = new JSONObject();
+        for(Document docs : database.getCollection("Tasks").find()){
+            try {
+                JSONObject object = (JSONObject) new JSONParser().parse(docs.toJson());
+                array.put(object);
+            }catch (ParseException e){
+                e.printStackTrace();
+            }
+        }
+        json.put("Tasks", array);
+        return json;
     }
 }

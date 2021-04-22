@@ -23,4 +23,8 @@ public interface Mongo {
     public void insertTaskJSON(JSONObject task);
 
     public JSONObject getAllTasksJSON();
+
+    public JSONObject getAllTasksByPriorityJSON();
+
+    public JSONObject getAllTasksByNameJSON();
 }
