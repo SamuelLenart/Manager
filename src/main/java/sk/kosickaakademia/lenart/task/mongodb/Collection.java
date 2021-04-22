@@ -220,7 +220,7 @@ public class Collection implements Mongo {
         database = mongoClient.getDatabase("TaskDB");
         JSONArray array = new JSONArray();
         JSONObject json = new JSONObject();
-        for(Document docs : database.getCollection("Tasks").find()){
+        for(Document docs : database.getCollection("tasks").find()){
             try {
                 JSONObject object = (JSONObject) new JSONParser().parse(docs.toJson());
                 array.put(object);
@@ -228,7 +228,7 @@ public class Collection implements Mongo {
                 e.printStackTrace();
             }
         }
-        json.put("Tasks", array);
+        json.put("tasks", array);
         return json;
     }
 
@@ -237,7 +237,7 @@ public class Collection implements Mongo {
         database = mongoClient.getDatabase("TaskDB");
         JSONArray array = new JSONArray();
         JSONObject json = new JSONObject();
-        for(Document docs : database.getCollection("Tasks").find()){
+        for(Document docs : database.getCollection("tasks").find()){
             try {
                 JSONObject object = (JSONObject) new JSONParser().parse(docs.toJson());
                 array.put(object);
@@ -245,7 +245,7 @@ public class Collection implements Mongo {
                 e.printStackTrace();
             }
         }
-        json.put("Tasks", array);
+        json.put("tasks", array);
         return json;
     }
 }
